@@ -1,36 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 
-void check_input(char *input)
-{
-    char *command = strtok(input, " ");
-    if (strcmp(command, "SET"))
-    {
-        printf("Unknown Command");
-    }
-    else
-    {
-        char *key = strtok(NULL, " ");
-        char *value = strtok(NULL, " ");
-        if (key == NULL || value == NULL)
-        {
-            printf("Invalid Format");
-        }
-        else
-        {
-            printf("Command: %s\n", command);
-            printf("Key: %s\n", key);
-            printf("Value: %s\n", value);
-        }
-    }
+struct ParsedCommand{
+    char *command;
+    char *key;
+    char *value;
+};
+
+void asking_input(char *input, int sizeInput){
+    fgets(input, sizeInput, stdin);
 }
 
-int main(void)
+void parsing_input(char *input)
 {
-    printf("VegaBase\nVersion 0.1\n");
-    char input[100];
-    //asking input to users
-    fgets(input, sizeof(input), stdin);
     input[strcspn(input, "\n")] = '\0';
     if (input[0] == '\0')
     {
@@ -38,7 +20,47 @@ int main(void)
     }
     else
     {
-        check_input(input);
+        char *command = strtok(input, " ");
+        if (strcmp(command, "SET"))
+        {
+            printf("Unknown Command");
+        }
+        else
+        {
+            char *key = strtok(NULL, " ");
+            char *value = strtok(NULL, " ");
+            if (key == NULL || value == NULL)
+            {
+                printf("Invalid Format");
+            }
+            else
+            {
+                struct ParsedCommand ValidCommand;
+                ValidCommand.command = command;
+                ValidCommand.key = key;
+                ValidCommand.value = value;
+
+                printf("%s ", ValidCommand.command);
+                printf("%s ", ValidCommand.key);
+                printf("%s ", ValidCommand.value);
+            }
+        }
+    }
+}
+
+int main(void)
+{
+    char input[100];
+    printf("VegaBase\nVersion 0.1\n");
+    asking_input(input, sizeof(input));
+    parsing_input(input);
+    FILE *database = fopen("data.vdb", "a");
+    if (database != NULL)
+    {
+        fprintf(database, "Hello VegaBase\n");
+        fclose(database);
+    } else {
+        printf("Failed to Open Database");
     }
     return 0;
 }
