@@ -10,14 +10,19 @@ int main(void){
         printf("Input Kosong");
     } else {
         char *command = strtok(input, " ");
-        char *key = strtok(NULL, " ");
-        char *value = strtok(NULL, " ");
-        if(command == NULL || key == NULL || value == NULL){
-            printf("Format salah\n");
-        } else {
-            printf("Command: %s\n", command);
-            printf("Key: %s\n", key);
-            printf("Value: %s\n", value);
+        if (strcmp(command, "SET"))
+        {
+            printf("Unknown Command");
+        } else{
+            char *key = strtok(NULL, " ");
+            char *value = strtok(NULL, " ");
+            if( key == NULL || value == NULL ){
+                printf("Invalid Format");
+            } else{
+                printf("Command: %s\n", command);
+                printf("Key: %s\n", key);
+                printf("Value: %s\n", value);
+            }
         }
     }
     return 0;
